@@ -138,7 +138,11 @@ def user_input_features():
         x =  np.array([[Gender,Own_Car,Own_Property,income_type,income_range,Family_Status,Housing_Type,Employment_Duration,Occupation,Education_level,Num_Family,age_years,]])
         # Call the prediction function
         predict_approval(x)
-        
+
+if __name__ == '__main__':
+    show_predict_page()
+    user_input_features()
+
          
   
         
