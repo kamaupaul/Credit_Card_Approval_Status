@@ -145,6 +145,3 @@ def user_input_features():
         '459000-486000', '486000-513000',
         '513000-540000', '540000-567
         
-if __name__ == '__main__':
-    show_predict_page()
-    user_input_features()
