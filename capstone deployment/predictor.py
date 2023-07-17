@@ -24,17 +24,15 @@ le_property = data['le_property']
 le_Income_Type = data['le_Income_Type']
 le_Income_Range = data['le_Income_Range']
 le_Family_Status = data['le_Family_Status']
-le_Housing_Type =data['le_Housing_Type']
-le_Occupation =data['le_Occupation']
-le_Education_Level =data['le_Education_Level']
-
+le_Housing_Type = data['le_Housing_Type']
+le_Occupation = data['le_Occupation']
+le_Education_Level = data['le_Education_Level']
 
 
 def show_predict_page():
+    st.title("Bank Credit Card Approver")
+    st.write("""### Your credit card approver co-pilot""")
 
-    st.title(" Bank Credit Card Approver")
-    st.write("""### your credit card approver co-pilot""")
-     
 
 def predict_approval(x):
     # Create a DataFrame with feature names
@@ -53,6 +51,7 @@ def predict_approval(x):
     df['Housing_Type'] = le_Housing_Type.transform(df['Housing_Type'])
     df['Occupation'] = le_Occupation.transform(df['Occupation'])
     df['Education_Level'] = le_Education_Level.transform(df['Education_Level'])
+
     # Make the prediction
     best_estimator = final_model.best_estimator_
     decision_tree = best_estimator.named_steps['tree']
@@ -64,6 +63,7 @@ def predict_approval(x):
     shap_values_std = np.std(shap_values_reshaped, axis=0)
     shap_std_df = pd.DataFrame({'Feature': column_names, 'Std': shap_values_std})
     shap.summary_plot(shap_values_reshaped, column_names, plot_type='bar')
+
     # Get the feature importance values from SHAP values
     shap_values_std = np.std(shap_values_reshaped, axis=0)
     feature_importance = pd.DataFrame({'Feature': column_names, 'Importance': shap_values_std})
@@ -76,19 +76,17 @@ def predict_approval(x):
 
     # Create horizontal bars and color code based on shap_std values
     bars = ax.barh(feature_importance['Feature'], feature_importance['Importance'],
-                color=np.where(feature_importance['Importance'] < 0.05, 'r', 'b'))
+                   color=np.where(feature_importance['Importance'] < 0.05, 'r', 'b'))
 
     # Add values on the right side of the bars
     for bar in bars:
         xval = bar.get_width()
         ax.text(xval, bar.get_y() + bar.get_height() / 2, round(xval, 3), ha='left', va='center')
 
-
     # Rotate x-axis labels for better visibility if needed
     plt.xticks(rotation=45)
 
     result = best_estimator.predict(df)
-    
 
     if result[0] == 1:
         approval_status = 'Approved'
@@ -96,76 +94,53 @@ def predict_approval(x):
     else:
         approval_status = 'Denied'
         reason = 'Reason:'
-        
 
-    
     # Display the approval status and reason
     st.subheader(approval_status)
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot(fig)
     st.write(reason, shap_std_df)
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    
 
-         
+
 def user_input_features():
-
-    Own_Property = ('Y','N')
-    Own_Car = ('Y','N')
-    Gender = ('F','M')
+    Own_Property = ('Y', 'N')
+    Own_Car = ('Y', 'N')
+    Gender = ('F', 'M')
     choice = ('Explore', 'Predict')
-    choice = st.sidebar.selectbox("Select",choice)
-    Gender = st.sidebar.selectbox('Gender',Gender)
-    Family_Status =('Married','Single','Civil marriage','Separated','Widow')
-    Family_Status=st.sidebar.selectbox('Marital Status',Family_Status)
+    choice = st.sidebar.selectbox("Select", choice)
+    Gender = st.sidebar.selectbox('Gender', Gender)
+    Family_Status = ('Married', 'Single', 'Civil marriage', 'Separated', 'Widow')
+    Family_Status = st.sidebar.selectbox('Marital Status', Family_Status)
     Housing_Type = ('House / apartment',
-                   'With parents',
-                   'Municipal apartment',
-                   'Rented apartment',
-                   'Office apartment',
-                   'Co-op apartment',)
-    Housing_Type=st.sidebar.selectbox('Type of House',Housing_Type)
-    Occupations=('unspecified',
-                 'Laborers',
-                 'Core staff',
-                 'Sales staff',
-                 'Managers',
-                 'Drivers',
-                 'High skill tech staff',
-                 'Accountants',
-                 'Medicine staff',
-                 'Cooking staff',
-                 'Security staff',
-                 'Cleaning staff',
-                 'Private service staff',
-                 'Low-skill Laborers',
-                 'Waiters/barmen staff',
-                 'Secretaries',
-                 'HR staff',
-                 'Realty agents',
-                 'IT staff',)
-    Education_level = ('Secondary','Higher education','Incomplete higher','Lower secondary','Academic degree')
-    income_range = ('27000-54000',
-'54000-81000','81000-108000','108000-135000','135000-162000','162000-189000','189000-216000','216000-243000','243000-270000','270000-297000',
-'297000-324000','324000-351000','351000-378000','378000-405000','405000-432000','432000-459000','459000-486000','486000-513000',
-'513000-540000','540000-567000','567000-594000','594000-621000','621000-648000','648000-675000','675000-702000','702000-729000',
-'729000-756000','756000-783000','783000-810000','810000-837000','891000-918000','945000-972000','972000-999000','1107000-1134000',
-'1350000-1377000','1566000-1593000')
-    income_type = ('Working','Commercial associate','Pensioner','State servant','Student')
-    Occupation=st.sidebar.selectbox('Occupation',Occupations)
-    Own_Car=st.sidebar.selectbox('Car owner',Own_Car)
-    Own_Property=st.sidebar.selectbox('Property',Own_Property)
-    Education_level=st.sidebar.selectbox('Education',Education_level)
-    income_type=st.sidebar.selectbox('Income type',income_type)
-    income_range=st.sidebar.selectbox('Income range',income_range)
-    Num_Family = st.sidebar.slider('Number of Family members',0,20,0)
-    age_years = st.sidebar.slider('AGE',0,100,0)
-    Employment_Duration= st.sidebar.slider('Years of Experience',0,100,0)
-    ok = st.button('Get Status')
-    if ok:
-        x =  np.array([[Gender,Own_Car,Own_Property,income_type,income_range,Family_Status,Housing_Type,Employment_Duration,Occupation,Education_level,Num_Family,age_years,]])
-        # Call the prediction function
-        predict_approval(x)
-        
-         
-  
-        
+                    'With parents',
+                    'Municipal apartment',
+                    'Rented apartment',
+                    'Office apartment',
+                    'Co-op apartment', )
+    Housing_Type = st.sidebar.selectbox('Type of House', Housing_Type)
+    Occupations = ('unspecified',
+                   'Laborers',
+                   'Core staff',
+                   'Sales staff',
+                   'Managers',
+                   'Drivers',
+                   'High skill tech staff',
+                   'Accountants',
+                   'Medicine staff',
+                   'Cooking staff',
+                   'Security staff',
+                   'Cleaning staff',
+                   'Private service staff',
+                   'Low-skill Laborers',
+                   'Waiters/barmen staff',
+                   'Secretaries',
+                   'HR staff',
+                   'Realty agents',
+                   'IT staff', )
+    Education_level = ('Secondary', 'Higher education', 'Incomplete higher', 'Lower secondary', 'Academic degree')
+    income_range = (
+        '27000-54000', '54000-81000', '81000-108000', '108000-135000', '135000-162000', '162000-189000',
+        '189000-216000', '216000-243000', '243000-270000', '270000-297000',
+        '297000-324000', '324000-351000', '351000-378000', '378000-405000', '405000-432000', '432000-459000',
+        '459000-486000', '486000-513000',
+        '513000-540000', '540000-567
