@@ -27,28 +27,29 @@ le_Family_Status = data['le_Family_Status']
 le_Housing_Type =data['le_Housing_Type']
 le_Occupation =data['le_Occupation']
 le_Education_Level =data['le_Education_Level']
-page_bg_img = """
+
+
+def page_home():
+    
+    page_bg_img = """
 <style>
-[class="stApp stAppEmbeddingId-rxqt5m6s623e css-fg4pbf e14zl3901"] {
+[class="appview-container css-1wrcr25 e1g8pov66"] {
 background-image: url("https://www.investopedia.com/thmb/pxxo1p6473mB4XmnwmSeAUdunSQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1203763961-880a467befb64f39856f3fc7904ae12a.jpg");
 background-size: cover;
 opacity: 1.0;
 }
 </style>
 """
-st.markdown(
+    st.markdown(
     """
     <style>
     [data-testid="stMarkdownContainer"] {
-        color: BLUE;
+        color: purple;
         font-weight: bold;
     }
     </style>
     """,
-    unsafe_allow_html=True
-)
-
-def page_home():
+    unsafe_allow_html=True)
 
     st.markdown(page_bg_img, unsafe_allow_html= True)
 
@@ -83,7 +84,7 @@ opacity: 0.9;
     """
     <style>
     [data-testid="stMarkdownContainer"] {
-        color: BLUE;
+        color: purple;
         font-weight: bold;
     }
     </style>
@@ -316,6 +317,11 @@ def predict_approval(x):
     output_text += "</div>"
 
     st.markdown(output_text, unsafe_allow_html=True)
+    if st.button('clear'):
+         page_info()
+        
+
+        
     # Make the prediction
 
 
@@ -380,6 +386,8 @@ def user_input_features():
     # Call the prediction function
         predict_approval(x)
         
+
+        
         
 def main():
     # Set the title and description
@@ -391,11 +399,10 @@ def main():
         
     if selected_page == "Home":
         page_home()
-           
+
     elif selected_page == "Approver":
         show_predict_page()
         user_input_features()
 
     elif selected_page == "Analyze":
         page_info()
-    
