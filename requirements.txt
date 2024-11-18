@@ -2,7 +2,7 @@ pandas
 streamlit
 numpy
 scipy
-scikit-learn==1.2.2
+scikit-learn
 shap
 matplotlib
 seaborn
