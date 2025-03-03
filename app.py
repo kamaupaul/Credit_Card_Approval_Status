@@ -373,7 +373,7 @@ def user_input_features():
     Occupation=st.sidebar.selectbox('Occupation',Occupations)
     Own_Car=st.sidebar.selectbox('Car owner',Own_Car)
     Own_Property=st.sidebar.selectbox('Property',Own_Property)
-    Education_level=st.sidebar.selectbox('Education',Education_level)
+    #Education_level=st.sidebar.selectbox('Education',Education_level)
     income_type=st.sidebar.selectbox('Income type',income_type)
     income_range=st.sidebar.selectbox('Income range',income_range)
     Num_Family = st.sidebar.slider('Number of Family members',0,20,0)
@@ -382,7 +382,8 @@ def user_input_features():
 
     ok = st.button('Get Status')
     if ok:
-        x =  np.array([[Gender,Own_Car,Own_Property,income_type,income_range,Family_Status,Housing_Type,Employment_Duration,Occupation,Education_level,Num_Family,age_years,]])
+        x =  np.array([[Gender,Own_Car,Own_Property,income_type,income_range,Family_Status,Housing_Type,Employment_Duration,Occupation,#Education_level,
+                        Num_Family,age_years,]])
     # Call the prediction function
         predict_approval(x)
         
