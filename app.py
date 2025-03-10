@@ -253,7 +253,8 @@ opacity: 0.9;
     st.empty()
     st.pyplot(fig)
     st.markdown(output_text, unsafe_allow_html=True)
-    st.set_option('deprecation.showPyplotGlobalUse', False)
+    #st.pyplot(fig)
+    #st.set_option('deprecation.showPyplotGlobalUse', False)
 
 page_bg_img1 = """
 <style>
@@ -286,7 +287,8 @@ def predict_approval(x):
     # Create a DataFrame with feature names
     columns = ['Gender', 'Own_Car', 'Own_Property', 'Income_Type', 'Income_Range',
             'Family_Status', 'Housing_Type', 'Employment_Duration', 'Occupation',
-            'Education_Level', 'Num_Family', 'age(years)']
+            #'Education_Level',
+              'Num_Family', 'age(years)']
     df = pd.DataFrame(x, columns=columns)
 
     # Transform categorical variables using label encoders
@@ -298,7 +300,7 @@ def predict_approval(x):
     df['Family_Status'] = le_Family_Status.transform(df['Family_Status'])
     df['Housing_Type'] = le_Housing_Type.transform(df['Housing_Type'])
     df['Occupation'] = le_Occupation.transform(df['Occupation'])
-    df['Education_Level'] = le_Education_Level.transform(df['Education_Level'])
+    #df['Education_Level'] = le_Education_Level.transform(df['Education_Level'])
     result = best_estimator.predict(df)
     if result[0] == 1:
         approval_status = 'Approved'
@@ -373,7 +375,7 @@ def user_input_features():
     Occupation=st.sidebar.selectbox('Occupation',Occupations)
     Own_Car=st.sidebar.selectbox('Car owner',Own_Car)
     Own_Property=st.sidebar.selectbox('Property',Own_Property)
-    #Education_level=st.sidebar.selectbox('Education',Education_level)
+    Education_level=st.sidebar.selectbox('Education',Education_level)
     income_type=st.sidebar.selectbox('Income type',income_type)
     income_range=st.sidebar.selectbox('Income range',income_range)
     Num_Family = st.sidebar.slider('Number of Family members',0,20,0)
